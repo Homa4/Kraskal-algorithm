@@ -9,6 +9,7 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
     const height = 600;
     const arrOfVertex = [];
     const arrOfVertexDx2 = [];
+    const arrForWeightVertexInSpannTree = [];
 
     class LinkedListNode {
         constructor(value, next = null) {
@@ -119,7 +120,7 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
                     if (!a) return b;
                     if (!b) return a;
 
-                    if (a.value.distance <= b.value.distance) {
+                    if (a.value.weight <= b.value.weight) {
                         result = a;
                         result.next = sortedMerge(a.next, b);
                     } else {
@@ -247,8 +248,7 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
         ctx.quadraticCurveTo(controlX, controlY, end.x, end.y);
         ctx.stroke();
     
-        // Calculate the position for the weight label on the curve
-        const t = 0.5; // mid-point of the curve
+        const t = 0.5; 
         const curveX = Math.pow(1 - t, 2) * start.x + 2 * (1 - t) * t * controlX + Math.pow(t, 2) * end.x;
         const curveY = Math.pow(1 - t, 2) * start.y + 2 * (1 - t) * t * controlY + Math.pow(t, 2) * end.y;
     
@@ -260,7 +260,6 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
     function drawWeight(cords, weight, angle) {
         ctx.save(); 
         ctx.translate(cords.x, cords.y); 
-        // ctx.rotate(angle); 
     
         ctx.beginPath();
         ctx.ellipse(0, 0, radius - 10, (radius - 10) / 2, angle, 0, Math.PI * 2);
@@ -291,7 +290,7 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
         drawWeight({ x: midX, y: midY }, weight, angle);
     }
 
-    function drawEdgeLine(vertex1, vertex2, distance, angle) {
+    function drawEdgeLine(vertex1, vertex2, weight, angle) {
         const { x: x1, y: y1 } = vertex1;
         const { x: x2, y: y2 } = vertex2;
 
@@ -311,9 +310,9 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
         });
 
         if (drawCurved) {
-            drawCurvedLine({ x: x1, y: y1 }, { x: x2, y: y2 }, distance, angle);
+            drawCurvedLine({ x: x1, y: y1 }, { x: x2, y: y2 }, weight, angle);
         } else {
-            drawStraitLine({ x: x1, y: y1 }, { x: x2, y: y2 }, distance, angle);
+            drawStraitLine({ x: x1, y: y1 }, { x: x2, y: y2 }, weight, angle);
         }
     }
 
@@ -322,7 +321,7 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
         for (let i = 0; i < numberOfVertex; i++) {
             for (let j = i + 1; j < numberOfVertex; j++) {
                 if (matrix[i][j] > 0) {
-                    edges.append({ start: i, end: j, distance: matrix[i][j] });
+                    edges.append({ start: i, end: j, weight: matrix[i][j] });
                 }
             }
         }
@@ -371,7 +370,8 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
                     arrOfVertex[edge.end].y - arrOfVertex[edge.start].y,
                     arrOfVertex[edge.end].x - arrOfVertex[edge.start].x
                 );
-                drawEdgeLine(arrOfVertex[edge.start], arrOfVertex[edge.end], edge.distance, angle);
+                drawEdgeLine(arrOfVertex[edge.start], arrOfVertex[edge.end], edge.weight, angle);
+                arrForWeightVertexInSpannTree.push(edge.weight);
                 edgeCount++;
             }
             currentNode = currentNode.next;
@@ -384,6 +384,9 @@ const kraskalAlgorithm = (rad, numOfVertex, matrix) => {
     drawGraphEdges();
     console.log(arrOfVertexDx2);
     console.log(matrix);
+    const sumOfSpannTree = arrForWeightVertexInSpannTree.reduce((total, item) => total + item);
+    console.log('sum of spann tree:', sumOfSpannTree);
+
 }
 
 export default kraskalAlgorithm;

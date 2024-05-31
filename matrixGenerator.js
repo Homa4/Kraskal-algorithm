@@ -109,6 +109,8 @@ function allMatrixs(numOfVertex) {
     matrixTrGenerator();
     matrixWGenerator();
 
+    
+
     return matrixW;
 }
 
