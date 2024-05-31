@@ -13,6 +13,5 @@ button.addEventListener("click", () => {
     const matrix = allMatrixs(numOfVertexValue);
     kraskalAlgorithm(radiusValue, numOfVertexValue, matrix);
     undefinedGraph(radiusValue, numOfVertexValue, matrix);
-    // generateVertexForBFS(radiusValue, numOfVertexValue, matrix);
     console.log(matrix);
 });

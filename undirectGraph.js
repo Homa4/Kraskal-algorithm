@@ -96,38 +96,11 @@ const undefinedGraph = (rad, numOfVertex, matrix) => {
         }
     }
 
-    function drawArrow(x2, y2, angle) {
-        const arrowSize = 12;
-        const gapX = Math.cos(angle) * radius;
-        const gapY = Math.sin(angle) * radius;
-        ctx.beginPath();
-        ctx.fillStyle = 'black';
-        ctx.moveTo(x2 - gapX, y2 - gapY);
-        ctx.lineTo(x2 - arrowSize * Math.cos(angle - Math.PI / 6) - gapX, y2 - arrowSize * Math.sin(angle - Math.PI / 6) - gapY);
-        ctx.lineTo(x2 - arrowSize * Math.cos(angle + Math.PI / 6) - gapX, y2 - arrowSize * Math.sin(angle + Math.PI / 6) - gapY);
-        ctx.closePath();
-        ctx.fill();
-    }
-
     function drawLoopedLineWithArrow(x, y, radius, angle) {
         ctx.beginPath();
         ctx.arc(x + 7, y, radius - 10, Math.PI / 6, (Math.PI * 11) / 6);
         ctx.stroke();
         ctx.closePath();
-
-        ctx.save();
-
-        ctx.translate(x + 7 + Math.cos((Math.PI * 11) / 6) * (radius - 10), y + Math.sin((Math.PI * 11) / 6) * (radius - 10));
-
-        const arrowSize = 12;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(-12, -15);
-        ctx.lineTo(-arrowSize * Math.cos((Math.PI * 11) / 6 + Math.PI / 6), -arrowSize * Math.sin((Math.PI * 11) / 6 + Math.PI / 6));
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.restore();
     }
 
     function drawArc(start, end, arrowDistance = 20, bendAngle = Math.PI / 8) {
@@ -160,26 +133,8 @@ const undefinedGraph = (rad, numOfVertex, matrix) => {
     }
 
     function drawArcArrow(start, end, arrowDistance = 10, bendAngle = Math.PI / 1) {
-        const arrowSize = 15;
-        const arrow = drawArc(start, end, arrowDistance, bendAngle);
-        const newEndX = arrow.newEndX;
-        const newEndY = arrow.newEndY;
-        const controlX = arrow.controlX;
-        const controlY = arrow.controlY;
-
-        const angle = Math.atan2(newEndY - controlY, newEndX - controlX);
-
-        ctx.save();
-        ctx.translate(newEndX, newEndY);
-        ctx.rotate(angle);
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(-arrowSize, arrowSize / 2);
-        ctx.lineTo(-arrowSize, -arrowSize / 2);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+         drawArc(start, end, arrowDistance, bendAngle);
+        
     }
 
     function drawStraitLine(start, end, angle) {
@@ -187,7 +142,6 @@ const undefinedGraph = (rad, numOfVertex, matrix) => {
         ctx.moveTo(start.x, start.y);
         ctx.lineTo(end.x, end.y);
         ctx.stroke();
-        drawArrow(end.x, end.y, angle);
         ctx.closePath();
     }
 
